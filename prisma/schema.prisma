@@ -25,6 +25,7 @@ model User {
   password String
   role     Role
   products Product[] @relation("UserProducts")
+  refreshToken String?
 }
 
 model Product {

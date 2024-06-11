@@ -38,9 +38,19 @@ export const registerUser = asyncHandleer(async (req, res) => {
   if (!newUser) {
     throw new ApiError(500, "Something went wrong while creating user in DB");
   }
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    newUser
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
 
   return res
     .status(201)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
     .json(new ApiResponse(200, newUser, "user created succesfully"));
 });
 
@@ -63,14 +73,23 @@ export const loginUser = asyncHandleer(async (req, res) => {
     throw new ApiError(400, "Please enter correct password");
   }
 
-  console.log(passwordCheck);
+  const { accessToken, refreshToken } = generateAccessAndRefreshToken(user);
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
   const loggedInUser = await prisma.user.findUnique({
     where: { email },
     select: { id: true, email: true, role: true },
   });
+
   return res
     .status(200)
-    .json(new ApiResponse(200, loggedInUser, "user logged in successfully"));
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(new ApiResponse(200, loggedInUser, "user logged in succesfully"));
 });
 
 const isPasswordCorrect = async (userPassword, DBpassword) => {
@@ -82,8 +101,6 @@ export function generateAccessToken(user) {
     {
       _id: user.id,
       email: user.email,
-      username: user.username,
-      fullName: user.fullName,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
@@ -103,3 +120,25 @@ export function generateRefreshToken(user) {
     }
   );
 }
+
+const generateAccessAndRefreshToken = async (user) => {
+  try {
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    user.refreshToken = refreshToken;
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        refreshToken: refreshToken,
+      },
+    });
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new ApiError(
+      500,
+      "Something went wrong while generating refresh and access token"
+    );
+  }
+};
