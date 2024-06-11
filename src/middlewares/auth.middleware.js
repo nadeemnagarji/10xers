@@ -35,6 +35,7 @@ export const verifyJwt = asyncHandleer(async (req, res, next) => {
 });
 
 export const verifyAdmin = (req, res, next) => {
+  console.log(req.user.role);
   if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "Access forbidden: Admins only" });
   }
