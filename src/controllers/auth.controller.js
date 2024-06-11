@@ -73,7 +73,9 @@ export const loginUser = asyncHandleer(async (req, res) => {
     throw new ApiError(400, "Please enter correct password");
   }
 
-  const { accessToken, refreshToken } = generateAccessAndRefreshToken(user);
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user
+  );
 
   const options = {
     httpOnly: true,
@@ -91,6 +93,28 @@ export const loginUser = asyncHandleer(async (req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .json(new ApiResponse(200, loggedInUser, "user logged in succesfully"));
 });
+
+export const logoutUser = asyncHandleer(async (req, res) => {
+  const id = req.user.id;
+
+  await prisma.user.update({
+    where: { id },
+    data: { refreshToken: undefined },
+  });
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User logged Out"));
+});
+
+// utility functions
 
 const isPasswordCorrect = async (userPassword, DBpassword) => {
   return await bcrypt.compare(userPassword, DBpassword);
