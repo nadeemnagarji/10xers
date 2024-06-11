@@ -33,3 +33,10 @@ export const verifyJwt = asyncHandleer(async (req, res, next) => {
     throw new ApiError(401, "Unauthorized request");
   }
 });
+
+export const verifyAdmin = (req, res, next) => {
+  if (req.user.role !== "ADMIN") {
+    return res.status(403).json({ error: "Access forbidden: Admins only" });
+  }
+  next();
+};
