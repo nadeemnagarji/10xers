@@ -51,7 +51,13 @@ export const registerUser = asyncHandleer(async (req, res) => {
     .status(201)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(new ApiResponse(200, newUser, "user created succesfully"));
+    .json(
+      new ApiResponse(
+        200,
+        { user: newUser, accessToken, refreshToken },
+        "user created succesfully"
+      )
+    );
 });
 
 export const loginUser = asyncHandleer(async (req, res) => {
@@ -91,7 +97,13 @@ export const loginUser = asyncHandleer(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(new ApiResponse(200, loggedInUser, "user logged in succesfully"));
+    .json(
+      new ApiResponse(
+        200,
+        { user: loggedInUser, accessToken, refreshToken },
+        "user logged in succesfully"
+      )
+    );
 });
 
 export const logoutUser = asyncHandleer(async (req, res) => {
