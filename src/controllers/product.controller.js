@@ -13,7 +13,7 @@ export const getAllProducts = asyncHandleer(async (req, res) => {
     new ApiError(500, "error while fetching the products");
   }
   return res
-    .status(201)
+    .status(200)
     .json(new ApiResponse(200, allproducts, "all products sent"));
 });
 
