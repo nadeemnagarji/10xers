@@ -13,12 +13,13 @@ export default function SignUpPage() {
   const [loader, setLoader] = useState(null);
   const [user, setUser] = useState({
     email: "",
-    role: "",
+    role: "ADMIN",
     password: "",
   });
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+    console.log(user);
   };
 
   const handleSubmit = async (e) => {
