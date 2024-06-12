@@ -7,6 +7,7 @@ import SignInPage from "./pages/SignInPage";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 import CreatePage from "./pages/CreatePage";
+import AllProducts from "./pages/AllProducts";
 
 function App() {
   return (
@@ -19,6 +20,10 @@ function App() {
             <Route path="/send" element={<TransferMoneyPage />}></Route>
             <Route path="/dashboard" element={<DashBoard />} />
             <Route path="/dashboard/create/:id" element={<CreatePage />} />
+            <Route
+              path="/dashboard/Allproducts/:id"
+              element={<AllProducts />}
+            />
           </Routes>
         </Router>
       </Provider>

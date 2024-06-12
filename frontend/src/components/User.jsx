@@ -1,6 +1,7 @@
 import image from "../../public/headphones.avif";
 
-export default function ProductCard({ id, name, price, description }) {
+// eslint-disable-next-line react/prop-types
+export default function ProductCard({ name, price, description }) {
   return (
     <div className=" h-[400px] py-2 bg-white border-gray-100/30 flex w-full max-w-xs flex-col self-center overflow-hidden rounded-lg border shadow-md ">
       <a

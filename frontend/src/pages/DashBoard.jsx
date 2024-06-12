@@ -9,12 +9,13 @@ export default function DashBoard() {
   const [products, setProducts] = useState([]);
   const { userData } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+
   const getProducts = async () => {
     const res = await axios.get(`http://localhost:3000/api/v1/products/all`);
     console.log(res.data);
     setProducts(res.data.data);
   };
-
+  console.log(userData);
   useEffect(() => {
     getProducts();
   }, []);
@@ -31,19 +32,27 @@ export default function DashBoard() {
               Role:{" "}
               <span className="bg-purple-500 text-white px-2 py-1 rounded-lg">
                 {" "}
-                {userData && userData.role}
+                {userData && userData?.role === "ADMIN" && userData.role}
               </span>
             </p>
           )}
-          {userData && userData.role === "ADMIN" && (
-            <button
-              onClick={() => {
-                navigate(`create/${userData.id}`);
-              }}
-              className="px-4 py-2 bg-green-400 rounded-sm text-sm font-medium"
-            >
-              Create a product
-            </button>
+          {userData && (
+            <div className=" flex gap-2">
+              <button
+                onClick={() => {
+                  navigate(`create/${userData.id}`);
+                }}
+                className="px-4 py-2 bg-green-400 rounded-sm text-sm font-medium"
+              >
+                Create a product
+              </button>
+              <button
+                onClick={() => navigate(`Allproducts/${userData.id}`)}
+                className="px-4 py-2 bg-green-400 rounded-sm text-sm font-medium"
+              >
+                All Products
+              </button>
+            </div>
           )}
         </div>
         <div className="w-[98%]  flex items-center justify-center flex-wrap bg-gray-300 rounded-md gap-5 px-5 py-8  ">
