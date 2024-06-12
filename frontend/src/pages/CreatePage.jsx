@@ -16,9 +16,8 @@ export default function CreatePage() {
   const { token } = useSelector((state) => state.auth);
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
-    console.log(product);
   };
-  // console.log(token);
+
   const handleSubmit = async (e) => {
     setLoader(true);
     e.preventDefault();
@@ -34,7 +33,6 @@ export default function CreatePage() {
       }
     );
 
-    console.log(res.data.data);
     if (res.data.data) {
       navigate("/dashboard");
     }

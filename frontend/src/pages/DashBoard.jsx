@@ -12,10 +12,10 @@ export default function DashBoard() {
 
   const getProducts = async () => {
     const res = await axios.get(`http://localhost:3000/api/v1/products/all`);
-    console.log(res.data);
+
     setProducts(res.data.data);
   };
-  console.log(userData);
+
   useEffect(() => {
     getProducts();
   }, []);
@@ -32,11 +32,11 @@ export default function DashBoard() {
               Role:{" "}
               <span className="bg-purple-500 text-white px-2 py-1 rounded-lg">
                 {" "}
-                {userData && userData?.role === "ADMIN" && userData.role}
+                {userData && userData?.role && userData.role}
               </span>
             </p>
           )}
-          {userData && (
+          {userData && userData.role === "ADMIN" && (
             <div className=" flex gap-2">
               <button
                 onClick={() => {

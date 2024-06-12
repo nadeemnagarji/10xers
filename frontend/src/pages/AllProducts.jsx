@@ -11,8 +11,6 @@ export default function AllProducts() {
   const params = useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
-  console.log(params.id);
-  console.log(products);
   const getAdminProduct = async () => {
     const res = await axios.get(
       `http://localhost:3000/api/v1/products/admin/${params.id}`,
@@ -22,7 +20,6 @@ export default function AllProducts() {
         },
       }
     );
-    console.log(res.data);
     setProducts(res.data.data);
   };
 
@@ -36,7 +33,7 @@ export default function AllProducts() {
           },
         }
       );
-      console.log(res);
+
       if (res.data.statusCode === 201) {
         toast.success("product deleted successfully");
         navigate(`/dashboard`);

@@ -68,7 +68,7 @@ export const loginUser = asyncHandleer(async (req, res) => {
   }
 
   const user = await prisma.user.findUnique({ where: { email } });
-
+  console.log(user);
   if (!user) {
     throw new ApiError(400, "invalid email id");
   }
